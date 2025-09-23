@@ -7,6 +7,11 @@
 #include <iomanip>
 #include "../lib_easy_example/easy_example.h"
 
+#include "../lib_TVector/TVector.h"
+#include "../lib_Math_Vector/Math_Vector.h"
+#include "../lib_Matrix/Matrix.h"
+#include "../lib_Matrix_Triangle/Matrix_Triangle.h"
+
 int main() {
   int a, b;
   float result;
