@@ -1,6 +1,6 @@
 #pragma once
 #include <initializer_list>
-#include "MVector.h"
+#include "..\lib_Math_Vector\Math_vector.h"
 template <class T>
 class Matrix : public MVector<T> {
 
