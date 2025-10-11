@@ -73,12 +73,7 @@ MVector<T>::MVector(MVector<T>& other)
 	: TVector<T>(other) {}
 
 
-template<class T> MVector<T>::~MVector() {
-	if (_data != nullptr) {
-		delete[] _data;
-		delete[] _states;
-	}
-}
+template<class T> MVector<T>::~MVector() {}
 
 
 

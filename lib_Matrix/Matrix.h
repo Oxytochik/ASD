@@ -2,7 +2,7 @@
 #include <initializer_list>
 #include "..\lib_Math_Vector\Math_vector.h"
 template <class T>
-class Matrix : public MVector<T> {
+class Matrix : public MVector<MVector<T>> {
 
 	int _column, _row;
 
@@ -41,9 +41,10 @@ public:
 
 template <class T>
 Matrix<T>::Matrix()
-	:MVector<MVector<T>>(), _row(0), _column(0)
-{
-}
+	:MVector<MVector<T>>(), 
+	_row(0), 
+	_column(0)
+{}
 
 template <class T>
 Matrix<T>::Matrix(int rows, int columns)
@@ -55,24 +56,24 @@ Matrix<T>::Matrix(int rows, int columns)
 		throw std::logic_error("Matrix size cant be negative");
 	}
 	for (int i = 0; i < rows; ++i) {
-		this->push_back(MathVector<T>(columns));
+		this->push_back(MVector<T>(columns));
 	}
 }
 
 template<class T>
 Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> init)
-	: MathVector<MathVector<T>>(),
-	_rows(static_cast<int>(init.size())),
-	_columns(0)
+	: MVector<MVector<T>>(),
+	_row(static_cast<int>(init.size())),
+	_column(0)
 {
 
-	if (_rows == 0) return;
+	if (_row == 0) return;
 
-	_columns = static_cast<int>(init.begin()->size());
+	_column = static_cast<int>(init.begin()->size());
 	for (auto& row : init) {
-		if (static_cast<int>(row.size()) != _columns)
+		if (static_cast<int>(row.size()) != _column)
 			throw std::logic_error("All rows in initializer list must have the same length!");
-		this->push_back(MathVector<T>(row));
+		this->push_back(MVector<T>(row));
 	}
 }
 
@@ -82,8 +83,7 @@ Matrix<T>::Matrix(Matrix<T>& other)
 	: MVector<MVector<T>>(other),
 	_row(other._row),
 	_column(other._column)
-{
-}
+{}
 
 template<class T>
 Matrix<T>::~Matrix() {}

@@ -10,9 +10,12 @@
 enum State { empty, busy, deleted };
 
 template<class T> class TVector {
+protected:
     T* _data = nullptr;
     int _size = 0;
     int _capacity = CAPACITY;
+    size_t _deleted = 0;
+    State* _states = nullptr;
 
 public:
     TVector();
@@ -74,8 +77,6 @@ public:
 
 private:
     bool is_full() const noexcept;
-    size_t _deleted = 0;
-    State* _states = nullptr;
     void effective_deletion();
     State get_state(int) const;
     int index_recalculation(int) const;
