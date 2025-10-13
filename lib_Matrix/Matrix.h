@@ -9,6 +9,7 @@ class Matrix : public MVector<MVector<T>> {
 public:
 
 	Matrix();
+	Matrix(int);
 	Matrix(int, int);
 	Matrix(std::initializer_list<std::initializer_list<T>>);
 	Matrix(Matrix<T>&);
@@ -45,6 +46,20 @@ Matrix<T>::Matrix()
 	_row(0), 
 	_column(0)
 {}
+
+template <class T>
+Matrix<T>::Matrix(int size)
+	: MVector<MVector<T>>(),
+	_row(size),
+	_column(size)
+{
+	if (size < 0) {
+		throw std::logic_error("Matrix size cant be negative");
+	}
+	for (int i = 0; i < size; ++i) {
+		this->push_back(MVector<T>(size));
+	}
+}
 
 template <class T>
 Matrix<T>::Matrix(int rows, int columns)
