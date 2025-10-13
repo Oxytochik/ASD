@@ -18,7 +18,7 @@ add_subdirectory(lib_Math_Vector)
 add_subdirectory(lib_TVector)
 add_subdirectory(lib_Matrix)
 add_subdirectory(lib_Matrix_Triangle)
-
+add_subdirectory(lib_Stack)
 
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
