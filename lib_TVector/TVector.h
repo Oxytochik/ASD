@@ -38,7 +38,7 @@ public:
     T* end() const;
     size_t deleted_count() const noexcept;
 
-
+    bool is_full() const noexcept;
     bool is_empty() const noexcept;
     void emplace(int, const T&);
 
@@ -50,6 +50,8 @@ public:
     void service_print() const;
 
     bool is_available(int) const;
+
+   
 
 
 
@@ -76,7 +78,6 @@ public:
     T& operator[](int) const;
 
 private:
-    bool is_full() const noexcept;
     void effective_deletion();
     State get_state(int) const;
     int index_recalculation(int) const;
