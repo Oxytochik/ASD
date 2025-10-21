@@ -14,6 +14,7 @@ include(cmake/function.cmake)         # подхватываем функции,
 								      # и для создания исполняемого проекта в отдельные функции
 
 # подключаем дополнительный CMakeLists.txt из подкаталога с именем 
+add_subdirectory(lib_Algorithms)
 add_subdirectory(lib_TVector)
 add_subdirectory(lib_Stack)
 add_subdirectory(lib_Queue)
