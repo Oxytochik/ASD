@@ -2,11 +2,16 @@
 #include <string>
 #include "../lib_Stack/stack.h"
 
-bool CheckBrackets(const std::string& input) {
-	int size;
+int BracketsNumb(const std::string input) {
+	int size = 0;
 	for (char bracket : input) {
 		if (bracket == '(' || bracket == '{' || bracket == '[') size++;
 	}
+	return size;
+}
+
+bool CheckBrackets(const std::string input) {
+	int size = BracketsNumb(input);
 	Stack<char> string(size);
 	for (char element : input) {
 		if (element == '(' || element == '{' || element == '[') {
