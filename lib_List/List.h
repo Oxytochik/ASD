@@ -10,25 +10,75 @@ struct Node {
     }
 };
 
+
+
 template <class T>
 class List {
     Node<T>* _head, * _tail;
 
 public:
 
+    class Iterator {
+        Node<T>* _current;
+
+    public:
+        Iterator() : _current(nullptr) {}
+        Iterator(Node<T>* node) : _current(node) {}
+
+        Iterator& operator=(const Iterator& other) noexcept {
+            _current = other._current;
+            return *this;
+        }
+
+        Iterator& operator++() noexcept {
+            if (_current != nullptr) {
+                _current = _current->next;
+            }
+            return *this;
+        }
+
+        Iterator operator++(int) noexcept {
+            Iterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        bool operator!=(const Iterator& other) const noexcept {
+            return _current != other._current;
+        }
+
+        bool operator==(const Iterator& other) const noexcept {
+            return _current == other._current;
+        }
+
+        T& operator*() {
+            if (_current == nullptr) {
+                throw std::runtime_error(
+                    "List::Iterator.operator*(): Dereferencing end iterator");
+            }
+            return _current->value;
+        }
+
+        T* operator->() {
+            if (_current == nullptr) {
+                throw std::runtime_error(
+                    "List::Iterator.operator->(): Accessing end iterator");
+            }
+            return &(_current->value);
+        }
+
+        Iterator& operator+=(size_t n) {
+            for (size_t i = 0; i < n && _current != nullptr; ++i) {
+                _current = _current->next;
+            }
+            return *this;
+        }
+    };
+
     Iterator begin();
     Iterator end();
 
-    class Iterator {
-        Node<T>* _current;
-    public:
 
-        Iterator(): _current(nullptr){}
-        Iterator(Node<T>* node): _current(node) {}
-
-        template <class T>
-        
-    };
 
 
 
