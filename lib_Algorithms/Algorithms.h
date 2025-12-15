@@ -2,6 +2,7 @@
 #include <string>
 #include <initializer_list>
 #include "../lib_Stack/stack.h"
+#include "../lib_TwinList/TwinList.h"
 
 int BracketsNumb(const std::string input) {
 	int size = 0;
@@ -130,4 +131,9 @@ void read_expression(const std::string expression) {
 	if (is_in(oper_numb.top(), operators, 5)) {
 		throw std::logic_error("Operation symbol cant be last symbol");
 	}
+}
+template <class T>
+bool is_looped(List<T> list) {
+	list.Iterator()
+
 }

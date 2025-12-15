@@ -238,4 +238,9 @@ public:
         }
         delete node;
     }
+
+    template <class T> //א גמע ץח קו חהוסü
+    inline Node<T>* List::get_tail() {
+        return _tail;
+    }
 };
