@@ -156,7 +156,6 @@ Matrix<T> Matrix<T>::mult(Matrix<T>& other) {
 			result[i][j] = (*this)[i].mult(otherT[j]);
 		}
 	}
-
 	return result;
 }
 
@@ -165,9 +164,7 @@ Matrix<T> Matrix<T>::mult_by_number(T& other) {
 	Matrix<T> result(_row, _column);
 
 	for (int i = 0; i < _row; i++) {
-		for (int j = 0; j < _column; j++) {
-			result[i][j] = (*this)[i][j] * other;
-		}
+		result[i] = (*this)[i] * other;
 	}
 	return result;
 }
@@ -179,10 +176,13 @@ Matrix<T> Matrix<T>::div_by_number(T& other) {
 	Matrix<T> result(_row, _column);
 
 	for (int i = 0; i < _row; i++) {
-		for (int j = 0; j < _column; j++) {
-			result[i][j] = (*this)[i][j] / other;
-		}
+		result[i] = (*this) / other;
 	}
+	//for (int i = 0; i < _row; i++) {
+	//	for (int j = 0; j < _column; j++) {
+	//		result[i][j] = (*this)[i][j] / other;
+	//	}
+	//}
 	return result;
 }
 
@@ -222,10 +222,10 @@ Matrix<T> Matrix<T>::operator*(T& other) {
 	return this->mult_by_number(other);
 }
 
-template<class T>
-Matrix<T> operator*(const T& number, Matrix<T>& matrix) {
-	return matrix * number;
-}
+//template<class T>
+//Matrix<T> operator*(const T& number, Matrix<T>& matrix) {
+//	return matrix * number;
+//}
 
 template<class T>
 Matrix<T> Matrix<T>::operator/(T& other) {

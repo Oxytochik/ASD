@@ -153,13 +153,11 @@ template<class T> Triangle_Matrix<T>::~Triangle_Matrix() {}
 
 template<class T>
 Triangle_Matrix<T> Triangle_Matrix<T>::add(Triangle_Matrix<T>& other) {
-	if (this->_row != other._row || this->_type != other._type) throw std::logic_error("Triangle matrices are not compatible for addition!");
+	if (this->_rows != other._rows || this->_type != other._type) throw std::logic_error("Triangle matrices are not compatible for addition!");
 
-	Triangle_Matrix<T> result(this->_row, this->_type);
+	Triangle_Matrix<T> result(*this);
 
-	for (int i = 0; i < this->_row; i++) {
-		result[i] = (*this)[i] + other[i];
-	}
+	result.Matrix<T>::operator+=(other);
 
 	return result;
 }
@@ -168,11 +166,9 @@ template<class T>
 Triangle_Matrix<T> Triangle_Matrix<T>::sub(Triangle_Matrix<T>& other){
 	if (this->_row != other._row || this->_type != other._type) throw std::logic_error("Triangle matrices are not compatible for subtraction!");
 
-	Triangle_Matrix<T> result(this->_row, this->_type);
+	Triangle_Matrix<T> result(*this);
 
-	for (int i = 0; i < this->_row; i++) {
-		result[i] = (*this)[i] - other[i];
-	}
+	result.Matrix<T>::operator-=(other);
 
 	return result;
 }
@@ -185,42 +181,39 @@ Triangle_Matrix<T> Triangle_Matrix<T>::mult(Triangle_Matrix<T>& other) {
 		throw std::logic_error("Triangle matrices must have the same type for multiplication!");
 
 	Triangle_Matrix<T> result(this->_row, this->_type);
+	Triangle_Matrix<T> otherT = other.transpose();
 
-	if (_type == _position::high) {
-		for (int i = 0; i < this->_row; i++) {
-			for (int j = i; j < this->_column; j++) {
-				MathVector<T> row_part(j - i + 1);
-				MathVector<T> col_vec(j - i + 1);
-
-				for (int k = 0; k <= j - i; k++)
-					row_part[k] = (*this)[i][k];
-
-				for (int k = i; k <= j; k++)
-					col_vec[k - i] = other[k][j - k];
-
-				result[i][j - i] = row_part * col_vec;
-			}
+	for (int i = 0; i < _row; i++) {
+		for (int j = 0; j < otherT._row; j++) {
+			result[i][j] = (*this)[i].mult(otherT[j]);
 		}
 	}
-
-	else {
-		for (int i = 0; i < this->_row; i++) {
-			for (int j = 0; j <= i; j++) {
-				MathVector<T> row_part(i - j + 1);
-				MathVector<T> col_vec(i - j + 1);
-
-				for (int k = 0; k <= i - j; k++)
-					row_part[k] = (*this)[i][k + j];
-
-				for (int k = j; k <= i; k++)
-					col_vec[k - j] = other[k][j];
-
-				result[i][j] = row_part * col_vec;
-			}
-		}
-	}
-
-
+	//if (_type == _position::high) {
+	//	for (int i = 0; i < this->_row; i++) {
+	//		for (int j = i; j < this->_column; j++) {
+	//			MathVector<T> row_part(j - i + 1);
+	//			MathVector<T> col_vec(j - i + 1);
+	//			for (int k = 0; k <= j - i; k++)
+	//				row_part[k] = (*this)[i][k];
+	//			for (int k = i; k <= j; k++)
+	//				col_vec[k - i] = other[k][j - k];
+	//			result[i][j - i] = row_part * col_vec;
+	//		}
+	//	}
+	//}
+	//else {
+	//	for (int i = 0; i < this->_row; i++) {
+	//		for (int j = 0; j <= i; j++) {
+	//			MathVector<T> row_part(i - j + 1);
+	//			MathVector<T> col_vec(i - j + 1);
+	//			for (int k = 0; k <= i - j; k++)
+	//				row_part[k] = (*this)[i][k + j];
+	//			for (int k = j; k <= i; k++)
+	//				col_vec[k - j] = other[k][j];
+	//			result[i][j] = row_part * col_vec;
+	//		}
+	//	}
+	//}
 	return result;
 }
 
@@ -253,13 +246,11 @@ Triangle_Matrix<T> Triangle_Matrix<T>::transpose() {
 	Triangle_Matrix<T> result(this->_row, this->_type == _position::high ? _position::low : _position::high);
 
 	for (int i = 0; i < this->_row; ++i) {
-		for (int j = 0; j < this->_row; ++j) {
-			if (this->_type == _position::high && j >= i) {
-				result(j, i) = (*this)(i, j);
-			}
-			else if (this->_type == _position::low && j <= i) {
-				result(j, i) = (*this)(i, j);
-			}
+		int start_j = (this->_type == triangle_type::high) ? i : 0;
+		int end_j = (this->_type == triangle_type::high) ? this->_row - 1 : i;
+
+		for (int j = start_j; j <= end_j; ++j) {
+			result[j][i] = (*this)[i][j];
 		}
 	}
 

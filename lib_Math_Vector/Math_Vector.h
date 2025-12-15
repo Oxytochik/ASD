@@ -157,17 +157,17 @@ MVector<T> MVector<T>::operator-(MVector<T>& other) {
 }
 template<class T>
 MVector<T> MVector<T>::operator*(T& other) {
-	return this->mult_by_number(other);
+	return this->mult_with_numb(other);
 }
 
 template<class T>
 MVector<T> MVector<T>::operator/(T& other) {
-	return this->div_by_number(other);
+	return this->div(other);
 }
 
 template<class T>
 T MVector<T>::operator*(MVector<T>& other) {
-	return this->scalar_mult(other);
+	return this->mult(other);
 }
 
 template<class T>
