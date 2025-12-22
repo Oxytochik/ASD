@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include "../lib_TVector/TVector.h"
 
+#define STANDARD_CAPACITY 15
 
 template<class T>
 class Stack {
@@ -16,41 +17,55 @@ public:
 	Stack(std::initializer_list<T>);
 	Stack(Stack<T>&);
 
-
 	void push(T val);
 	void pop();
 	inline T top();
 	inline bool is_empty() noexcept;
 	inline bool is_full() noexcept;
 	void clear() noexcept;
-
 };
 
 template <class T>
 Stack<T>::Stack() {
-	_data.shrink_to_fit();
+	_data.reserve(STANDARD_CAPACITY);
 }
 
 template <class T>
 Stack<T>::Stack(int size) {
-	_data.reserve(size);
+	if (size <= 0) {
+		_data.reserve(STANDARD_CAPACITY);
+	}
+	else {
+		_data.reserve(size +STANDARD_CAPACITY);
+	}
 }
 
 template <class T>
 Stack<T>::Stack(TVector<T>& vector) {
 	_data = TVector<T>(vector);
-	_data.shrink_to_fit();
+	// Добавляем запас памяти, если вектор заполнен
+	if (_data.capacity() == _data.size()) {
+		size_t new_capacity = _data.capacity() + STANDARD_CAPACITY;
+		_data.reserve(new_capacity);
+	}
 }
 
 template <class T>
 Stack<T>::Stack(std::initializer_list<T> init_list) {
 	_data = TVector<T>(init_list);
-	_data.shrink_to_fit();
+	// Добавляем запас памяти
+	size_t needed_capacity = _data.size() + STANDARD_CAPACITY;
+	_data.reserve(needed_capacity);
 }
+
 template <class T>
 Stack<T>::Stack(Stack<T>& other) {
 	_data = other._data;
-	_data.shrink_to_fit();
+	// Добавляем запас памяти, если стек заполнен
+	if (_data.capacity() == _data.size()) {
+		size_t new_capacity = _data.capacity() + STANDARD_CAPACITY;
+		_data.reserve(new_capacity);
+	}
 }
 
 template <class T>

@@ -1,162 +1,157 @@
+#pragma once
+
 #include <iostream>
 #include <initializer_list>
-#include "../lib_List/List.h"
+#include "../lib_list/list.h"
 
-template <class T>
+#define STANDARD_SIZE 15
+
+template<class T>
 class Queue {
-	T* _data;
-	int _size;
-	//	int _top;
-	int _head;
-	int _tail;
-	int _count;
+    List<T> _data;
+    int _capacity;    // максимальная вместимость
+    int _count;       // количество элементов
+
 public:
-	Queue();
-	Queue(int);
-	Queue(std::initializer_list<T> init);
-	Queue(Queue& other);
+    Queue();
+    Queue(int capacity);
+    Queue(std::initializer_list<T> init);
+    Queue(Queue<T>& other);
 
-	~Queue();
+    int get_capacity() const;
+    int get_count() const;
 
-	int get_size();
-	int get_count();
-
-	void push(T);
-	void pop();
-	inline T tail() const;
-	inline bool is_empty()const noexcept;
-	inline bool is_full()const noexcept;
-	void clear() noexcept;
-	T head() const;
-
+    void push(T val);
+    void pop();
+    T tail() const;
+    bool is_empty() const noexcept;
+    bool is_full() const noexcept;
+    void clear() noexcept;
+    T head() const;
 };
+
 template <class T>
 Queue<T>::Queue()
-	:_data(nullptr),
-	_size(0),
-	_head(0),
-	_tail(0),
-	_count(0)
+    : _capacity(STANDARD_SIZE),
+    _count(0)
 {
+    // List не требует предварительного резервирования памяти
 }
 
 template <class T>
 Queue<T>::Queue(int capacity)
-	:_size(capacity),
-	_head(0),
-	_tail(0),
-	_count(0)
+    : _capacity(capacity > 0 ? capacity : STANDARD_SIZE),
+    _count(0)
 {
-	if (capacity > 0) {
-		_data = new T[capacity];
-	}
-	else {
-		_data = nullptr;
-	}
+    if (capacity <= 0) {
+        throw std::logic_error("Queue capacity must be positive");
+    }
 }
-template <class T>
-Queue<T>::Queue(std::initializer_list<T> init) {
-	if (init.size() <= 0) {
-		throw std::invalid_argument(
-			"Queue: Invalid argument - list must not be empty");
-	}
-	_size = init.size();
-	_data = new T[_size];
-	_head = 0;
-	_count = init.size();
 
-	const T* src = init.begin();
-	for (int i = 0; i < _size; i++) {
-		_data[i] = src[i];
-	}
-	_tail = _count % _size;
+template <class T>
+Queue<T>::Queue(std::initializer_list<T> init)
+    : _capacity(init.size() + STANDARD_SIZE),  // Запас памяти: размер + STANDARD_SIZE
+    _count(0)
+{
+    for (const auto& item : init) {
+        push(item);
+    }
 }
 
 template <class T>
 Queue<T>::Queue(Queue<T>& other)
-	:_size(other._size),
-	_head(other._head),
-	_tail(other._tail),
-	_count(other._count)
+    : _capacity(other._capacity + STANDARD_SIZE),  // Добавляем запас памяти
+    _count(0)
 {
-	if (_size > 0) {
-		_data = new T[_size];
-		for (int i = 0; i < _size; i++) {
-			_data[i] = other._data[i];
-		}
-	}
-	else {
-		_data = nullptr;
-	}
+    // Копируем элементы из другой очереди
+    // Проходим по всем элементам другой очереди
+    auto it = other._data.begin();
+    while (it != other._data.end()) {
+        push(*it);
+        ++it;
+    }
 }
 
 template <class T>
-Queue<T>::~Queue() {
-	delete[] _data;
+int Queue<T>::get_capacity() const {
+    return _capacity;
 }
 
 template <class T>
-int Queue<T>::get_size() {
-	return _size;
-}
-template <class T>
-int Queue<T>::get_count() {
-	return _count;
+int Queue<T>::get_count() const {
+    return _count;
 }
 
 template <class T>
 void Queue<T>::push(T val) {
-	if (is_full()) {
-		throw std::logic_error("Queue is full");
-	}
-	else {
-		_count++;
-		_data[_tail] = val;
-		_tail = (_tail + 1) % _size;
-	}
+    if (is_full()) {
+        throw std::logic_error("Queue is full");
+    }
+
+    _data.push_back(val);
+    _count++;
 }
+
 template <class T>
 void Queue<T>::pop() {
-	if (is_empty()) {
-		throw std::logic_error("Queue is empty");
-	}
-	else {
-		_count--;
-		_head = (_head + 1) % _size;
-	}
+    if (is_empty()) {
+        throw std::logic_error("Queue is empty");
+    }
+
+    _data.pop_front();
+    _count--;
 }
 
 template <class T>
-inline T Queue<T>::tail() const {
-	if (is_empty()) {
-		throw std::logic_error("Queue it empty");
-	}
-	return _data[(_tail + _size - 1) % _size];
+T Queue<T>::tail() const {
+    if (is_empty()) {
+        throw std::logic_error("Queue is empty");
+    }
+
+    // Находим последний элемент через итератор
+    // Так как в List нет быстрого доступа к последнему элементу,
+    // нам нужно пройтись по всему списку
+    auto it = _data.begin();
+    T last_value;
+
+    while (it != _data.end()) {
+        last_value = *it;
+        ++it;
+    }
+
+    return last_value;
 }
 
 template <class T>
-inline bool Queue<T>::is_empty()const noexcept {
-	return _count == 0;
+bool Queue<T>::is_empty() const noexcept {
+    return _count == 0;
 }
 
 template <class T>
-inline bool Queue<T>::is_full()const noexcept {
-	return _count == _size;
+bool Queue<T>::is_full() const noexcept {
+    return _count >= _capacity;
 }
 
 template <class T>
 void Queue<T>::clear() noexcept {
-	_head = 0;
-	_tail = 0;
-	_count = 0;
+    // Очищаем список
+    while (!_data.is_empty()) {
+        _data.pop_front();
+    }
+    _count = 0;
 }
 
 template <class T>
-inline T Queue<T>::head() const {
-	if (is_empty()) {
-		throw std::logic_error("Queue it empty");
-	}
-	return _data[_head];
+T Queue<T>::head() const {
+    if (is_empty()) {
+        throw std::logic_error("Queue is empty");
+    }
+
+    // Получаем первый элемент через итератор
+    auto it = _data.begin();
+    if (it != _data.end()) {
+        return *it;
+    }
+
+    throw std::logic_error("Queue is empty");
 }
-
-
