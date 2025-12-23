@@ -17,33 +17,80 @@
 
 
 
-bool is_local_min(Matrix<int>& matrix, int pos) {
-    int rows = matrix.get_row();
-    int cols = matrix.get_column();
+template<typename T>
+bool find_smaller_neighbor(Matrix<T>& matrix, int current_i, int current_j,
+    int& min_i, int& min_j, T& min_val) {
+    T current_value = matrix[current_i][current_j];
+    min_val = current_value;
+    min_i = current_i;
+    min_j = current_j;
+    bool found_smaller = false;
 
-    int i = pos / cols;
-    int j = pos % cols;
-    int current = matrix[i][j];
+    if (current_i > 0 && matrix[current_i - 1][current_j] < min_val) {
+        min_val = matrix[current_i - 1][current_j];
+        min_i = current_i - 1;
+        min_j = current_j;
+        found_smaller = true;
+    }
 
-    if (i > 0 && matrix[i - 1][j] < current) return false;          
-    if (i < rows - 1 && matrix[i + 1][j] < current) return false;     
-    if (j > 0 && matrix[i][j - 1] < current) return false;          
-    if (j < cols - 1 && matrix[i][j + 1] < current) return false; 
+    if (current_j < matrix.get_column() - 1 &&
+        matrix[current_i][current_j + 1] < min_val) {
+        min_val = matrix[current_i][current_j + 1];
+        min_i = current_i;
+        min_j = current_j + 1;
+        found_smaller = true;
+    }
 
-    return true;
+    if (current_i < matrix.get_row() - 1 &&
+        matrix[current_i + 1][current_j] < min_val) {
+        min_val = matrix[current_i + 1][current_j];
+        min_i = current_i + 1;
+        min_j = current_j;
+        found_smaller = true;
+    }
+
+    if (current_j > 0 && matrix[current_i][current_j - 1] < min_val) {
+        min_val = matrix[current_i][current_j - 1];
+        min_i = current_i;
+        min_j = current_j - 1;
+        found_smaller = true;
+    }
+
+    return found_smaller;
 }
 
-void local_min(Matrix<int> matrix) {
-    int total_elements = matrix.get_row() * matrix.get_column();
+template<typename T>
+T matrix_get_local_min(Matrix<T>& matrix) {
+    if (matrix.get_row() == 0 || matrix.get_column() == 0) {
+        throw std::invalid_argument("Matrix cannot be empty");
+    }
 
-    for (int pos = 0; pos < total_elements; pos++) {
-        if (is_local_min(matrix, pos)) {
-            int i = pos / matrix.get_column();
-            int j = pos % matrix.get_column();
-            std::cout << "Loc min: " << matrix[i][j] << std::endl;
+    static bool seeded = false;
+    if (!seeded) {
+        std::srand(static_cast<unsigned>(std::time(nullptr)));
+        seeded = true;
+    }
+
+    int current_i = std::rand() % matrix.get_row();
+    int current_j = std::rand() % matrix.get_column();
+
+    bool continue_flag = true;
+
+    while (continue_flag) {
+        int min_i, min_j;
+        T min_val;
+        if (find_smaller_neighbor(matrix, current_i, current_j, min_i, min_j, min_val)) {
+            current_i = min_i;
+            current_j = min_j;
+        }
+        else {
+            continue_flag = false;
         }
     }
+
+    return matrix[current_i][current_j];
 }
+
 
 int main() {
     Matrix<int> vector = {
@@ -51,7 +98,9 @@ int main() {
         {5,8,4},
         {7,6,9}
     };
-    local_min(vector);
+    int min;
+    min = matrix_get_local_min(vector);
+    std::cout << min;
     return 0;
 }
 
