@@ -1,4 +1,4 @@
-//стек на списке, очередь на списке (проверить на дубликаты и разбить их (два теста в одном), список покрыть тестами, не забыть про инициализатор.
+////стек на списке, очередь на списке (проверить на дубликаты и разбить их (два теста в одном), список покрыть тестами, не забыть про инициализатор.
 #include <gtest/gtest.h>
 #include "../lib_list/List.h"
 #include <iostream>
@@ -346,4 +346,73 @@ TEST(ListTest, MultipleDeletions) {
         values.push_back(val);
     }
     EXPECT_EQ(values, std::vector<int>({ 2, 4 }));
+}
+
+TEST(ListIteratorTest, EmptyListIteration) {
+    List<int> list;
+
+    EXPECT_EQ(list.begin(), list.end());
+
+    int count = 0;
+    for (auto it = list.begin(); it != list.end(); ++it) {
+        count++;
+    }
+    EXPECT_EQ(count, 0);
+}
+
+TEST(ListIteratorTest, ReadIterator) {
+    List<int> list;
+    list.push_back(10);
+    list.push_back(20);
+    list.push_back(30);
+
+    auto it = list.begin();
+
+    EXPECT_EQ(*it, 10);
+    ++it;
+    EXPECT_EQ(*it, 20);
+    ++it;
+    EXPECT_EQ(*it, 30);
+    ++it;
+    EXPECT_EQ(it, list.end());
+
+    std::vector<int> values;
+    for (int val : list) {
+        values.push_back(val);
+    }
+    EXPECT_EQ(values.size(), 3);
+    EXPECT_EQ(values[0], 10);
+    EXPECT_EQ(values[1], 20);
+    EXPECT_EQ(values[2], 30);
+}
+
+TEST(ListIteratorTest, WriteIterator) {
+    List<int> list;
+    list.push_back(1);
+    list.push_back(2);
+    list.push_back(3);
+
+    auto it = list.begin();
+    *it = 100;
+    ++it;
+    *it = 200;
+    ++it;
+    *it = 300;
+
+    it = list.begin();
+    EXPECT_EQ(*it, 100);
+    ++it;
+    EXPECT_EQ(*it, 200);
+    ++it;
+    EXPECT_EQ(*it, 300);
+
+    // Меняем все значения на 0
+    for (auto it = list.begin(); it != list.end(); ++it) {
+        *it = 0;
+    }
+
+    // Проверяем, что все значения стали 0
+    for (auto it = list.begin(); it != list.end(); ++it) {
+        EXPECT_EQ(*it, 0);
+    }
 }

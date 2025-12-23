@@ -36,14 +36,13 @@ Stack<T>::Stack(int size) {
 		_data.reserve(STANDARD_CAPACITY);
 	}
 	else {
-		_data.reserve(size +STANDARD_CAPACITY);
+		_data.reserve(size);
 	}
 }
 
 template <class T>
 Stack<T>::Stack(TVector<T>& vector) {
 	_data = TVector<T>(vector);
-	// Добавляем запас памяти, если вектор заполнен
 	if (_data.capacity() == _data.size()) {
 		size_t new_capacity = _data.capacity() + STANDARD_CAPACITY;
 		_data.reserve(new_capacity);
@@ -53,7 +52,6 @@ Stack<T>::Stack(TVector<T>& vector) {
 template <class T>
 Stack<T>::Stack(std::initializer_list<T> init_list) {
 	_data = TVector<T>(init_list);
-	// Добавляем запас памяти
 	size_t needed_capacity = _data.size() + STANDARD_CAPACITY;
 	_data.reserve(needed_capacity);
 }
@@ -61,7 +59,6 @@ Stack<T>::Stack(std::initializer_list<T> init_list) {
 template <class T>
 Stack<T>::Stack(Stack<T>& other) {
 	_data = other._data;
-	// Добавляем запас памяти, если стек заполнен
 	if (_data.capacity() == _data.size()) {
 		size_t new_capacity = _data.capacity() + STANDARD_CAPACITY;
 		_data.reserve(new_capacity);

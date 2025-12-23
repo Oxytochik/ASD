@@ -58,7 +58,23 @@ public:
             return _current->value;
         }
 
+        const T& operator*() const {
+            if (_current == nullptr) {
+                throw std::runtime_error(
+                    "List::Iterator.operator*(): Dereferencing end iterator");
+            }
+            return _current->value;
+        }
+
         T* operator->() {
+            if (_current == nullptr) {
+                throw std::runtime_error(
+                    "List::Iterator.operator->(): Accessing end iterator");
+            }
+            return &(_current->value);
+        }
+
+        const T* operator->() const {
             if (_current == nullptr) {
                 throw std::runtime_error(
                     "List::Iterator.operator->(): Accessing end iterator");
@@ -74,10 +90,16 @@ public:
         }
     };
 
+    // Константные и неконстантные версии методов begin и end
     Iterator begin() { return Iterator(_head); }
     Iterator end() { return Iterator(nullptr); }
 
+    // Константные версии для работы с const объектами
+    Iterator begin() const { return Iterator(_head); }
+    Iterator end() const { return Iterator(nullptr); }
+
     Node* get_tail() { return _tail; }
+    const Node* get_tail() const { return _tail; }
 
     List() : _head(nullptr), _tail(nullptr) {}
 
@@ -89,13 +111,81 @@ public:
         }
     }
 
+    // Убрал лишний шаблонный параметр <class T> - он уже есть у класса
+    T& front() {
+        if (is_empty()) {
+            throw std::logic_error("List.front(): List is empty");
+        }
+        return _head->value;
+    }
+
+    const T& front() const {
+        if (is_empty()) {
+            throw std::logic_error("List.front(): List is empty");
+        }
+        return _head->value;
+    }
+
+    // Убрал лишний шаблонный параметр <class T>
+    T& back() {
+        if (is_empty()) {
+            throw std::logic_error("List.back(): List is empty");
+        }
+        return _tail->value;
+    }
+
+    const T& back() const {
+        if (is_empty()) {
+            throw std::logic_error("List.back(): List is empty");
+        }
+        return _tail->value;
+    }
+
+    // Оператор присваивания
+    List& operator=(const List& other) {
+        if (this != &other) {
+            clear();
+            Node* cur = other._head;
+            while (cur != nullptr) {
+                push_back(cur->value);
+                cur = cur->next;
+            }
+        }
+        return *this;
+    }
+
+    // Операторы сравнения
+    bool operator==(const List& other) const {
+        Node* cur1 = _head;
+        Node* cur2 = other._head;
+
+        while (cur1 != nullptr && cur2 != nullptr) {
+            if (cur1->value != cur2->value) {
+                return false;
+            }
+            cur1 = cur1->next;
+            cur2 = cur2->next;
+        }
+
+        return cur1 == nullptr && cur2 == nullptr;
+    }
+
+    bool operator!=(const List& other) const {
+        return !(*this == other);
+    }
+
     ~List() {
+        clear();
+    }
+
+    // Метод clear для очистки списка
+    void clear() {
         while (!is_empty()) {
             pop_front();
         }
     }
 
-    bool is_empty() {
+    bool is_empty() const {
         return _head == nullptr;
     }
 

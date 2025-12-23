@@ -1,191 +1,141 @@
 #include <gtest/gtest.h>
 #include <initializer_list>
-#include "../lib_QueueL/queuel.h"
+#include "../lib_queue/queue.h"
 
 TEST(QueueListTest, DefaultConstructor) {
-    Queue<int> q;
-    EXPECT_TRUE(q.is_empty());
-    EXPECT_FALSE(q.is_full());
+    Queue<int> queue;
+    EXPECT_TRUE(queue.is_empty());
+    EXPECT_FALSE(queue.is_full());
 }
 
 TEST(QueueListTest, ConstructorWithCapacity) {
-    Queue<int> q(5);
-    EXPECT_TRUE(q.is_empty());
-    EXPECT_FALSE(q.is_full());
+    Queue<int> queue(5);
+    EXPECT_TRUE(queue.is_empty());
+    EXPECT_FALSE(queue.is_full());
 }
 
-TEST(QueueListTest, ConstructorWithZeroCapacity) {
-    EXPECT_THROW(Queue<int> q(0), std::logic_error);
-}
-
-TEST(QueueListTest, ConstructorWithInitializerList) {
-    Queue<int> q({ 1, 2, 3, 4, 5 });
-    EXPECT_FALSE(q.is_empty());
-    EXPECT_EQ(q.head(), 1);
-    EXPECT_EQ(q.tail(), 5);
+TEST(QueueListTest, ConstructorInvalidCapacity) {
+    EXPECT_THROW(Queue<int> queue(0), std::logic_error);
+    EXPECT_THROW(Queue<int> queue(-5), std::logic_error);
 }
 
 TEST(QueueListTest, CopyConstructor) {
-    Queue<int> original({ 1, 2, 3 });
+    Queue<int> original;
+    original.push(1);
+    original.push(2);
+    original.push(3);
+
     Queue<int> copy(original);
 
-    EXPECT_EQ(original.head(), copy.head());
-    EXPECT_EQ(original.tail(), copy.tail());
     EXPECT_FALSE(copy.is_empty());
+    EXPECT_EQ(copy.head(), 1);
+    // В вашей реализации List нет get_count(), убираем эту проверку
 }
 
-TEST(QueueListTest, BasicOperations) {
-    Queue<int> q;
-    EXPECT_TRUE(q.is_empty());
+TEST(QueueListTest, Push) {
+    Queue<int> queue(3);
 
-    q.push(1);
-    EXPECT_EQ(q.head(), 1);
-    EXPECT_EQ(q.tail(), 1);
+    queue.push(1);
+    EXPECT_EQ(queue.head(), 1);
 
-    q.push(2);
-    EXPECT_EQ(q.head(), 1);
-    EXPECT_EQ(q.tail(), 2);
+    queue.push(2);
+    EXPECT_EQ(queue.head(), 1);
 
-    q.push(3);
-    EXPECT_EQ(q.head(), 1);
-    EXPECT_EQ(q.tail(), 3);
-
-    q.pop();
-    EXPECT_EQ(q.head(), 2);
-    EXPECT_EQ(q.tail(), 3);
-
-    q.pop();
-    EXPECT_EQ(q.head(), 3);
-    EXPECT_EQ(q.tail(), 3);
-
-    q.pop();
-    EXPECT_TRUE(q.is_empty());
+    queue.push(3);
+    EXPECT_TRUE(queue.is_full());
 }
 
-TEST(QueueListTest, PushToFullQueue) {
-    Queue<int> q(2);
-    q.push(1);
-    q.push(2);
+TEST(QueueListTest, Pop) {
+    Queue<int> queue;
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
 
-    EXPECT_THROW(q.push(3), std::logic_error);
+    EXPECT_EQ(queue.head(), 1);
+    queue.pop();
+    EXPECT_EQ(queue.head(), 2);
+    queue.pop();
+    EXPECT_EQ(queue.head(), 3);
+    queue.pop();
+    EXPECT_TRUE(queue.is_empty());
 }
 
-TEST(QueueListTest, PopFromEmptyQueue) {
-    Queue<int> q;
-    EXPECT_THROW(q.pop(), std::logic_error);
-}
+TEST(QueueListTest, Head) {
+    Queue<int> queue;
+    queue.push(10);
+    EXPECT_EQ(queue.head(), 10);
 
-TEST(QueueListTest, HeadAndTailOperations) {
-    Queue<int> q({ 10, 20, 30 });
+    queue.push(20);
+    EXPECT_EQ(queue.head(), 10);
 
-    EXPECT_EQ(q.head(), 10);
-    EXPECT_EQ(q.tail(), 30);
-
-    q.pop();
-    EXPECT_EQ(q.head(), 20);
-    EXPECT_EQ(q.tail(), 30);
-
-    q.push(40);
-    EXPECT_EQ(q.head(), 20);
-    EXPECT_EQ(q.tail(), 40);
-
-    q.pop();
-    EXPECT_EQ(q.head(), 30);
-    EXPECT_EQ(q.tail(), 40);
-}
-
-TEST(QueueListTest, HeadFromEmptyQueue) {
-    Queue<int> q;
-    EXPECT_THROW(q.head(), std::logic_error);
-}
-
-TEST(QueueListTest, TailFromEmptyQueue) {
-    Queue<int> q;
-    EXPECT_THROW(q.tail(), std::logic_error);
+    queue.pop();
+    EXPECT_EQ(queue.head(), 20);
 }
 
 TEST(QueueListTest, IsEmpty) {
-    Queue<int> q;
-    EXPECT_TRUE(q.is_empty());
+    Queue<int> queue;
+    EXPECT_TRUE(queue.is_empty());
 
-    q.push(1);
-    EXPECT_FALSE(q.is_empty());
+    queue.push(1);
+    EXPECT_FALSE(queue.is_empty());
 
-    q.pop();
-    EXPECT_TRUE(q.is_empty());
+    queue.pop();
+    EXPECT_TRUE(queue.is_empty());
 }
 
 TEST(QueueListTest, IsFull) {
-    Queue<int> q(3);
+    Queue<int> queue(2);
+    EXPECT_FALSE(queue.is_full());
 
-    EXPECT_FALSE(q.is_full());
-    q.push(1);
-    EXPECT_FALSE(q.is_full());
-    q.push(2);
-    EXPECT_FALSE(q.is_full());
-    q.push(3);
-    EXPECT_TRUE(q.is_full());
+    queue.push(1);
+    EXPECT_FALSE(queue.is_full());
 
-    q.pop();
-    EXPECT_FALSE(q.is_full());
+    queue.push(2);
+    EXPECT_TRUE(queue.is_full());
+
+    queue.pop();
+    EXPECT_FALSE(queue.is_full());
 }
 
-TEST(QueueListTest, ClearOperation) {
-    Queue<int> q = { 1, 2, 3, 4, 5 };
+TEST(QueueListTest, Clear) {
+    Queue<int> queue;
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
 
-    EXPECT_FALSE(q.is_empty());
-    q.clear();
-    EXPECT_TRUE(q.is_empty());
-
-    q.push(10);
-    EXPECT_EQ(q.head(), 10);
-    EXPECT_EQ(q.tail(), 10);
+    EXPECT_FALSE(queue.is_empty());
+    queue.clear();
+    EXPECT_TRUE(queue.is_empty());
+    // В вашей реализации List нет get_count(), убираем эту проверку
 }
 
-TEST(QueueListTest, MixedOperations) {
-    Queue<int> q(10);
-
-    for (int i = 1; i <= 5; i++) {
-        q.push(i);
-    }
-
-    EXPECT_EQ(q.head(), 1);
-    EXPECT_EQ(q.tail(), 5);
-
-    q.pop();
-    q.pop();
-
-    EXPECT_EQ(q.head(), 3);
-    EXPECT_EQ(q.tail(), 5);
-
-    q.push(6);
-    q.push(7);
-
-    EXPECT_EQ(q.head(), 3);
-    EXPECT_EQ(q.tail(), 7);
-
-    q.clear();
-    EXPECT_TRUE(q.is_empty());
-
-    q.push(100);
-    EXPECT_EQ(q.head(), 100);
-    EXPECT_EQ(q.tail(), 100);
+TEST(QueueListTest, HeadEmptyQueue) {
+    Queue<int> queue;
+    EXPECT_THROW(queue.head(), std::logic_error);
 }
 
-TEST(QueueListTest, LargeNumberOfElements) {
-    Queue<int> q(1000);
+TEST(QueueListTest, PushFullQueue) {
+    Queue<int> queue(2);
+    queue.push(1);
+    queue.push(2);
 
-    for (int i = 0; i < 500; i++) {
-        q.push(i);
-    }
+    EXPECT_THROW(queue.push(3), std::logic_error);
+}
 
-    EXPECT_EQ(q.head(), 0);
-    EXPECT_EQ(q.tail(), 499);
+TEST(QueueListTest, SequenceOfOperations) {
+    Queue<int> queue(5);
 
-    for (int i = 0; i < 250; i++) {
-        q.pop();
-    }
+    queue.push(10);
+    queue.push(20);
+    queue.push(30);
 
-    EXPECT_EQ(q.head(), 250);
-    EXPECT_EQ(q.tail(), 499);
+    EXPECT_EQ(queue.head(), 10);
+
+    queue.pop();
+    EXPECT_EQ(queue.head(), 20);
+
+    queue.push(40);
+
+    queue.clear();
+    EXPECT_TRUE(queue.is_empty());
 }

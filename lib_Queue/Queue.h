@@ -8,10 +8,10 @@
 template<class T>
 class Queue {
     T* _data;
-    int _capacity;    // вместимость (с запасом)
+    int _capacity;   
     int _head;
     int _tail;
-    int _count;       // количество элементов
+    int _count;      
 
 public:
     Queue();
@@ -44,7 +44,7 @@ Queue<T>::Queue()
 
 template <class T>
 Queue<T>::Queue(int capacity)
-    : _capacity(capacity > 0 ? capacity + STANDARD_SIZE : STANDARD_SIZE),
+    : _capacity(capacity > 0 ? capacity: STANDARD_SIZE),
     _head(0),
     _tail(0),
     _count(0)
@@ -62,19 +62,18 @@ Queue<T>::Queue(std::initializer_list<T> init) {
             "Queue: Invalid argument - list must not be empty");
     }
 
-    // Устанавливаем вместимость с запасом: размер списка + STANDARD_SIZE
     _capacity = init.size() + STANDARD_SIZE;
     _head = 0;
     _count = init.size();
 
     _data = new T[_capacity];
 
-    // Копируем элементы из списка инициализации
+
     const T* src = init.begin();
     for (int i = 0; i < _count; i++) {
         _data[i] = src[i];
     }
-    _tail = _count;  // _tail указывает на следующую свободную позицию
+    _tail = _count;  
 }
 
 template <class T>

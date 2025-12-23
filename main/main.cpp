@@ -3,57 +3,57 @@
 //#define EASY_EXAMPLE
 //#ifdef EASY_EXAMPLE
 
-#include <iostream>
-#include <iomanip>
-#include "../lib_easy_example/easy_example.h"
-
-#include "../lib_TVector/TVector.h"
-#include "../lib_Math_Vector/Math_Vector.h"
-#include "../lib_Matrix/Matrix.h"
-#include "../lib_Matrix_Triangle/Matrix_Triangle.h"
-
-#include <iostream>
-#include <vector>
-
-
-
-bool is_local_min(Matrix<int>& matrix, int pos) {
-    int rows = matrix.get_row();
-    int cols = matrix.get_column();
-
-    int i = pos / cols;
-    int j = pos % cols;
-    int current = matrix[i][j];
-
-    if (i > 0 && matrix[i - 1][j] < current) return false;          
-    if (i < rows - 1 && matrix[i + 1][j] < current) return false;     
-    if (j > 0 && matrix[i][j - 1] < current) return false;          
-    if (j < cols - 1 && matrix[i][j + 1] < current) return false; 
-
-    return true;
-}
-
-void local_min(Matrix<int> matrix) {
-    int total_elements = matrix.get_row() * matrix.get_column();
-
-    for (int pos = 0; pos < total_elements; pos++) {
-        if (is_local_min(matrix, pos)) {
-            int i = pos / matrix.get_column();
-            int j = pos % matrix.get_column();
-            std::cout << "Loc min: " << matrix[i][j] << std::endl;
-        }
-    }
-}
-
-int main() {
-    Matrix<int> vector = {
-        {3,1,2},
-        {5,8,4},
-        {7,6,9}
-    };
-    local_min(vector);
-    return 0;
-}
+//#include <iostream>
+//#include <iomanip>
+//#include "../lib_easy_example/easy_example.h"
+//
+//#include "../lib_TVector/TVector.h"
+//#include "../lib_Math_Vector/Math_Vector.h"
+//#include "../lib_Matrix/Matrix.h"
+//#include "../lib_Matrix_Triangle/Matrix_Triangle.h"
+//
+//#include <iostream>
+//#include <vector>
+//
+//
+//
+//bool is_local_min(Matrix<int>& matrix, int pos) {
+//    int rows = matrix.get_row();
+//    int cols = matrix.get_column();
+//
+//    int i = pos / cols;
+//    int j = pos % cols;
+//    int current = matrix[i][j];
+//
+//    if (i > 0 && matrix[i - 1][j] < current) return false;          
+//    if (i < rows - 1 && matrix[i + 1][j] < current) return false;     
+//    if (j > 0 && matrix[i][j - 1] < current) return false;          
+//    if (j < cols - 1 && matrix[i][j + 1] < current) return false; 
+//
+//    return true;
+//}
+//
+//void local_min(Matrix<int> matrix) {
+//    int total_elements = matrix.get_row() * matrix.get_column();
+//
+//    for (int pos = 0; pos < total_elements; pos++) {
+//        if (is_local_min(matrix, pos)) {
+//            int i = pos / matrix.get_column();
+//            int j = pos % matrix.get_column();
+//            std::cout << "Loc min: " << matrix[i][j] << std::endl;
+//        }
+//    }
+//}
+//
+//int main() {
+//    Matrix<int> vector = {
+//        {3,1,2},
+//        {5,8,4},
+//        {7,6,9}
+//    };
+//    local_min(vector);
+//    return 0;
+//}
 
 
 
