@@ -35,7 +35,7 @@ TEST(AlgotithmTests, Brackets_after_operation) {
 }
 
 TEST(AlgotithmTests, Brackets_after_operation_numb_version) {
-	EXPECT_ANY_THROW(read_expression("5()"));
+	EXPECT_ANY_THROW(read_expression("5*(5)"));
 }
 
 TEST(AlgotithmTests, CloseBracket_without_open_bracket) {
