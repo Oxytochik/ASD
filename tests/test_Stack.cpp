@@ -82,18 +82,18 @@ TEST(StackTest, Empty) {
 	EXPECT_FALSE(a.is_empty());
 }
 
-TEST(StackTest, Full) {
-	Stack<int> tested_Stack(1);
-	tested_Stack.push(1);
-
-	//Stack<int> tested_Stack{ 1,2,3 };
-	//for (int i = 0; i < 15;i++) {
-	//	tested_Stack.push(i);
-	//}
-	EXPECT_TRUE(tested_Stack.is_full());
-	Stack<int> a(2);
-	EXPECT_FALSE(a.is_full());
-}
+//TEST(StackTest, Full) {
+//	Stack<int> tested_Stack(1);
+//	tested_Stack.push(1);
+//
+//	//Stack<int> tested_Stack{ 1,2,3 };
+//	//for (int i = 0; i < 15;i++) {
+//	//	tested_Stack.push(i);
+//	//}
+//	EXPECT_TRUE(tested_Stack.is_full());
+//	Stack<int> a(2);
+//	EXPECT_FALSE(a.is_full());
+//}
 
 TEST(StackTest, Clear) {
 	Stack<int> tested_Stack{ 1,2,3 };

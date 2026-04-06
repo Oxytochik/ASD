@@ -23,6 +23,17 @@ add_subdirectory(lib_TwinList)
 add_subdirectory(lib_StackL)
 add_subdirectory(lib_QueueL)
 add_subdirectory (lib_DSU)
+add_subdirectory (lib_Monom)
+add_subdirectory (lib_Polinom)
+add_subdirectory (lib_ITable)
+add_subdirectory (lib_TableM)
+add_subdirectory (lib_Uns_TableL)
+add_subdirectory (lib_Uns_TableM)
+
+
+
+
+
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

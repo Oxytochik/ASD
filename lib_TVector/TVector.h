@@ -492,7 +492,7 @@ template<class T> State TVector<T>::get_state(int index) const {
 }
 
 template<class T> int TVector<T>::index_recalculation(int index) const {
-    if (index >= size() || index < 0) {
+    if (index > size() || index < 0) { //убрали равно (>=)
         throw std::out_of_range("Index out of range");
     }
     int busy_index = -1, real_index = index;
