@@ -9,8 +9,8 @@ public:
 
     virtual void insert(const TKey&, const TValue&) = 0;
     virtual void erase(const TKey&) = 0;
-    virtual TValue* find(const TKey&) noexcept = 0;
-    virtual bool isEmpty() const noexcept = 0;
+    virtual TValue* find(const TKey&) = 0;
+    virtual bool is_empty() const noexcept = 0;
 
     virtual void print(std::ostream& out) const = 0;
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <stdexcept>
 
@@ -6,92 +8,94 @@
 
 template <class TKey, class TValue>
 class STableV : public ITable<TKey, TValue> {
-private:
     TVector<std::pair<TKey, TValue>> _rows;
-
-    //int binarySearch(const TKey& key) const {
-    //    int left = 0;
-    //    int right = static_cast<int>(_rows.size()) - 1;
-    //    while (left <= right) {
-    //        int mid = left + (right - left) / 2;
-    //        if (_rows[mid].first == key)
-    //            return mid;
-    //        if (_rows[mid].first < key)
-    //            left = mid + 1;
-    //        else
-    //            right = mid - 1;
-    //    }
-    //    // left – позиция для вставки
-    //    return -(left + 1);
-    //}
-
-    int binarySearch(const TKey& key) const {
-        int left = 0;
-        int right = _rows.size() - 1;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (_rows[mid].first == key)
-                return mid;
-            if (_rows[mid].first < key)
-                left = mid + 1;
-            else
-                right = mid - 1;
-        }
-        return -1;
-    }
 
 public:
     STableV() = default;
+    STableV(const STableV&) = default;
+    ~STableV() override = default;
 
-    void insert(const TKey& key, const TValue& value) override {
-        int index = binarySearch(key);
-        if (index != -1) {
-            _rows[index].second = value;
-            return;
-        }
-        //бин поиск снизу переделать под единый формат
-        int left = 0;
-        int right = _rows.size() - 1;
-        int insertPos = 0;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (_rows[mid].first == key) {
-                insertPos = mid;
-                break;
-            }
-            if (_rows[mid].first < key) {
-                left = mid + 1;
-                insertPos = left;
-            }
-            else {
-                right = mid - 1;
-                //insertPos = mid;
-            }
-        }
-        _rows.insert(insertPos, std::make_pair(key, value));
-    }
+    void insert(const TKey& key, const TValue& value) override;
+    void erase(const TKey& key) override;
+    TValue* find(const TKey& key) noexcept override;
 
-    void erase(const TKey& key) override {
-        int index = binarySearch(key);
-        if (index != -1)
-            _rows.erase(index);
-    }
+    bool is_empty() const noexcept override;
+    void print(std::ostream& out) const override;
 
-    TValue* find(const TKey& key) noexcept override {
-        int index = binarySearch(key);
-        if (index != -1)
-            return &_rows[index].second;
-        return nullptr;
-    }
-
-    bool isEmpty() const noexcept override {
-        return _rows.is_empty();
-    }
-
-    void print(std::ostream& out) const override {
-        out << "STableV (" << _rows.size() << " rows):\n";
-        for (int i = 0; i < _rows.size(); ++i)
-            out << "  " << _rows[i].first << " -> " << _rows[i].second << "\n";
-    }
-
+private:
+    int binary_search(const TKey& key) const;
+    int find_insert_position(const TKey& key) const;
 };
+
+
+
+template <class TKey, class TValue>
+int STableV<TKey, TValue>::binary_search(const TKey& key) const {
+    int left = 0;
+    int right = _rows.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (_rows[mid].first == key)
+            return mid;
+        if (_rows[mid].first < key)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    return -1;
+}
+
+template <class TKey, class TValue>
+int STableV<TKey, TValue>::find_insert_position(const TKey& key) const {
+    int left = 0;
+    int right = _rows.size() - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (_rows[mid].first < key) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+    return left;
+}
+
+template <class TKey, class TValue>
+void STableV<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+    int index = binary_search(key);
+    if (index != -1) {
+        _rows[index].second = value;
+        return;
+    }
+    int insert_pos = find_insert_position(key);
+    _rows.insert(insert_pos, std::make_pair(key, value));
+}
+
+template <class TKey, class TValue>
+void STableV<TKey, TValue>::erase(const TKey& key) {
+    int index = binary_search(key);
+    if (index != -1)
+        _rows.erase(index);
+}
+
+template <class TKey, class TValue>
+TValue* STableV<TKey, TValue>::find(const TKey& key) noexcept {
+    int index = binary_search(key);
+    if (index != -1)
+        return &_rows[index].second;
+    return nullptr;
+}
+
+template <class TKey, class TValue>
+bool STableV<TKey, TValue>::is_empty() const noexcept {
+    return _rows.is_empty();
+}
+
+template <class TKey, class TValue>
+void STableV<TKey, TValue>::print(std::ostream& out) const {
+    out << "STableV (" << _rows.size() << " rows):\n";
+    for (int i = 0; i < _rows.size(); ++i)
+        out << "  " << _rows[i].first << " -> " << _rows[i].second << "\n";
+}

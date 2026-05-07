@@ -77,14 +77,14 @@ TEST(TestSTableV, check_an_empty_table) {
     t1.insert(1.5, "it is double");
     t1.erase(1.5);
 
-    EXPECT_TRUE(t1.isEmpty());
+    EXPECT_TRUE(t1.is_empty());
 }
 
 TEST(TestSTableV, check_a_non_empty_table) {
     STableV<double, std::string> t1;
     t1.insert(1.5, "it is double");
 
-    EXPECT_FALSE(t1.isEmpty());
+    EXPECT_FALSE(t1.is_empty());
 }
 
 TEST(TestSTableV, check_the_table_for_sorting) {

@@ -42,7 +42,7 @@ TEST(TestUnsortedTableV, erase_nonexistent_key_does_nothing) {
     t1.insert(1, "First");
     t1.insert(2, "Second");
 
-    EXPECT_NO_THROW(t1.erase(5));
+    EXPECT_ANY_THROW(t1.erase(5));
 
     auto ptr = t1.find(1);
     EXPECT_EQ(*ptr, "First");
@@ -74,12 +74,12 @@ TEST(TestUnsortedTableV, check_an_empty_table) {
     t1.insert(1.5, "it is double");
     t1.erase(1.5);
 
-    EXPECT_TRUE(t1.isEmpty());
+    EXPECT_TRUE(t1.is_empty());
 }
 
 TEST(TestUnsortedTableV, check_a_non_empty_table) {
     UnsortedTableV<double, std::string> t1;
     t1.insert(1.5, "it is double");
 
-    EXPECT_FALSE(t1.isEmpty());
+    EXPECT_FALSE(t1.is_empty());
 }

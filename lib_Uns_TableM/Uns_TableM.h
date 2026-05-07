@@ -3,52 +3,89 @@
 
 #include "..\lib_ITable\ITable.h"
 #include "..\lib_TVector\TVector.h"
-//дублирование при всех поисках
+
 template <class TKey, class TValue>
 class UnsortedTableV : public ITable<TKey, TValue> {
 private:
     TVector<std::pair<TKey, TValue>> _rows;
-
 public:
     UnsortedTableV() = default;
+    UnsortedTableV(const UnsortedTableV&) = default;
+    ~UnsortedTableV() override = default;
 
-    void insert(const TKey& key, const TValue& value) override {
-        for (size_t i = 0; i < _rows.size(); i++) {
-            if (_rows[i].first == key) {
-                _rows[i].second = value;
-                return;
-            }
-        }
+    void insert(const TKey&, const TValue&) override;
+    void erase(const TKey&) override;
+    TValue* find(const TKey&) override;
 
-        _rows.push_back({ key, value });
-    }
+    bool is_empty() const noexcept override;
+    void print(std::ostream& out) const override;
 
-    void erase(const TKey& key) override {
-        for (size_t i = 0; i < _rows.size(); i++) {
-            if (_rows[i].first == key) {
-                _rows.erase(i);
-                return;
-            }
-        }
-    }
-
-    TValue* find(const TKey& key) noexcept override {
-        for (size_t i = 0; i < _rows.size(); i++) {
-            if (_rows[i].first == key) {
-                return &_rows[i].second;
-            }
-        }
-        return nullptr;
-    }
-
-    bool isEmpty() const noexcept override { 
-        return _rows.is_empty(); 
-    }
-
-    void print(std::ostream& out) const override {
-        out << "UnsortedTableV (" << _rows.size() << " rows):\n";
-        for (size_t i = 0; i < _rows.size(); i++) {
-            out << "  " << _rows[i].first << " -> " << _rows[i].second << "\n";
-        }
-    }
+private:
+    int find_pos(const TKey&) const noexcept;
 };
+
+
+
+template <class TKey, class TValue>
+void UnsortedTableV<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+    int pos = find_pos(key);
+    if (pos != -1) {
+        _rows[pos].second = value;
+        return;
+    }
+    _rows.push_back(std::make_pair(key, value));
+}
+
+template <class TKey, class TValue>
+void UnsortedTableV<TKey, TValue>::erase(const TKey& key) {
+    int pos = find_pos(key);
+    if (pos != -1) {
+        _rows.erase(pos);
+        return;
+    }
+    throw std::logic_error("Key not found!");
+}
+
+template <class TKey, class TValue>
+TValue* UnsortedTableV<TKey, TValue>::find(const TKey& key) {
+    int pos = find_pos(key);
+    if (pos != -1) {
+        return &_rows[pos].second;
+    }
+    return nullptr;
+}
+
+template <class TKey, class TValue>
+bool UnsortedTableV<TKey, TValue>::is_empty() const noexcept{
+    return _rows.is_empty();
+}
+
+template <class TKey, class TValue>
+void UnsortedTableV<TKey, TValue>::print(std::ostream& out) const {
+    out << "UnsortedTableV: \n";
+    for (int i = 0; i < _rows.size();i++) {
+        out << "| " << _rows[i].first << " | " << _rows[i].second << " |\n";
+    }
+}
+
+template <class TKey, class TValue>
+int UnsortedTableV<TKey, TValue>::find_pos(const TKey& key) const noexcept {
+    for (size_t i = 0; i < _rows.size(); i++) {
+        if (_rows[i].first == key) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+//template <class TKey, class Tvalue>
+//int UnsortedTableV<class TKey, class TValue>::find_pos(const TKey& key) const {
+//    for (size_t i = 0; i < _rows.size(); i++) {
+//        if (_rows[i].first == key) {
+//            return i;
+//        }
+//    }
+//    return -1;
+//}
+
+
