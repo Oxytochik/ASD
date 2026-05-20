@@ -52,7 +52,7 @@ TValue* UnsortedTableV<TKey, TValue>::find(const TKey& key) {
     if (pos != -1) {
         return &_rows[pos].second;
     }
-    return nullptr;
+    throw std::logic_error("Key not found!");
 }
 
 template <class TKey, class TValue>
