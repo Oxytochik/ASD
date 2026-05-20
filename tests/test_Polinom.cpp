@@ -1,4 +1,4 @@
-// PolynomTest.cpp
+
 #include <gtest/gtest.h>
 #include <sstream>
 #include "../lib_Polinom/Polinom.h"
