@@ -82,7 +82,7 @@ TEST(TestSTableV, check_an_empty_table) {
 
 TEST(TestSTableV, check_a_non_empty_table) {
     STableV<double, std::string> t1;
-    t1.insert(1.5, "it is double");
+    t1.insert(1.5, "double");
 
     EXPECT_FALSE(t1.is_empty());
 }
@@ -93,7 +93,6 @@ TEST(TestSTableV, check_the_table_for_sorting) {
     t1.insert("pos2", "Second");
     t1.insert("pos1", "First");
 
-    // Проверяем, что все ключи доступны (сортировка не должна ломать поиск)
     auto ptr = t1.find("pos3");
     ASSERT_NE(ptr, nullptr);
     EXPECT_EQ(*ptr, "Third");

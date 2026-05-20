@@ -35,7 +35,6 @@ TEST(TestUnsortedTableL, check_the_erase) {
     t1.erase(1);
 
     EXPECT_ANY_THROW(t1.find(1));
-    //EXPECT_EQ(t1.find(1), nullptr);
 }
 
 TEST(TestUnsortedTableL, erase_nonexistent_key_does_nothing) {
@@ -64,19 +63,18 @@ TEST(TestUnsortedTableL, check_the_key_find) {
     EXPECT_EQ(*ptr, "when");
 }
 
-TEST(TestUnsortedTableL, find_returns_nullptr_for_missing_key) {
+TEST(TestUnsortedTableL, find_returns_throw_for_missing_key) {
     UnsortedTableL<std::string, std::string> t1;
     t1.insert("r123", "what");
     t1.insert("r567", "where");
     t1.insert("r974", "when");
 
     EXPECT_ANY_THROW(t1.find("r1024"), nullptr);
-    //EXPECT_EQ(t1.find("r1024"), nullptr);
 }
 
 TEST(TestUnsortedTableL, check_an_empty_table) {
     UnsortedTableL<double, std::string> t1;
-    t1.insert(1.5, "it is double");
+    t1.insert(1.5, "double");
     t1.erase(1.5);
 
     EXPECT_TRUE(t1.is_empty());

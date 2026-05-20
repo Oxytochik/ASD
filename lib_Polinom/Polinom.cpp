@@ -5,7 +5,6 @@
 #include <cmath>
 #include <climits>
 
-// ==================== Constructors ====================
 
 Polynom::Polynom() : _polynom(), _name("") {}
 
@@ -37,20 +36,18 @@ Polynom::Polynom(const std::string& str) : _polynom(), _name("") {
             if (sign == '-')
                 m = Monom(-m.get_coeff(), m.get_powers());
             if (!m.is_zero())
-                *this += m;          // сохраняет упорядоченность
+                *this += m;          
         }
     }
 }
 
 Polynom::Polynom(const Polynom& other) = default;
 
-// ==================== Name ====================
 
 void Polynom::set_name(const std::string& name) {
     _name = name;
 }
 
-// ==================== Zero check ====================
 
 bool Polynom::is_zero() const {
     if (_polynom.is_empty()) return true;
@@ -60,7 +57,6 @@ bool Polynom::is_zero() const {
     return true;
 }
 
-// ==================== Core arithmetic ====================
 
 Polynom Polynom::add(const Polynom& other) const {
     Polynom result;
@@ -179,7 +175,6 @@ std::pair<Polynom, Polynom> Polynom::divmod(const Polynom& other) const {
     return { quotient, remainder };
 }
 
-// ==================== Operations with monomials ====================
 
 Polynom Polynom::add_a_monom(const Monom& other) const {
     return *this + Polynom(other);
@@ -200,7 +195,6 @@ std::pair<Polynom, Polynom> Polynom::divmod_by_monom(const Monom& other) const {
     return divmod(Polynom(other));
 }
 
-// ==================== Operations with numbers ====================
 
 Polynom Polynom::add_a_number(double other) const {
     return *this + Monom(other);
@@ -217,7 +211,6 @@ Polynom Polynom::div_by_number(double other) const {
     return *this * Monom(1.0 / other);
 }
 
-// ==================== Evaluation ====================
 
 double Polynom::value_at_the_point(double x, double y, double z) const {
     double result = 0.0;
@@ -226,7 +219,6 @@ double Polynom::value_at_the_point(double x, double y, double z) const {
     return result;
 }
 
-// ==================== Operators (Polynom ? Polynom) ====================
 
 Polynom Polynom::operator+(const Polynom& other) const { return add(other); }
 Polynom Polynom::operator-(const Polynom& other) const { return sub(other); }
@@ -234,7 +226,6 @@ Polynom Polynom::operator*(const Polynom& other) const { return mult(other); }
 Polynom Polynom::operator/(const Polynom& other) const { return div(other); }
 Polynom Polynom::operator%(const Polynom& other) const { return mod(other); }
 
-// ==================== Operators (Polynom ? Monom) ====================
 
 Polynom Polynom::operator+(const Monom& other) const { return add_a_monom(other); }
 Polynom Polynom::operator-(const Monom& other) const { return sub_a_monom(other); }
@@ -242,25 +233,16 @@ Polynom Polynom::operator*(const Monom& other) const { return mult_by_monom(othe
 Polynom Polynom::operator/(const Monom& other) const { return div_by_monom(other); }
 Polynom Polynom::operator%(const Monom& other) const { return mod_by_monom(other); }
 
-//Polynom operator+(const Monom& monom, const Polynom& polynom) { return polynom + monom; }
-//Polynom operator-(const Monom& monom, const Polynom& polynom) { return Polynom(monom) - polynom; }
-//Polynom operator*(const Monom& monom, const Polynom& polynom) { return polynom * monom; }
-//Polynom operator/(const Monom& monom, const Polynom& polynom) { return Polynom(monom) / polynom; }
-//Polynom operator%(const Monom& monom, const Polynom& polynom) { return Polynom(monom) % polynom; }
 
-// ==================== Operators (Polynom ? double) ====================
+
 
 Polynom Polynom::operator+(double other) const { return add_a_number(other); }
 Polynom Polynom::operator-(double other) const { return sub_a_number(other); }
 Polynom Polynom::operator*(double other) const { return mult_by_number(other); }
 Polynom Polynom::operator/(double other) const { return div_by_number(other); }
 
-//Polynom operator+(double number, const Polynom& polynom) { return polynom + number; }
-//Polynom operator-(double number, const Polynom& polynom) { return Polynom(number) - polynom; }
-//Polynom operator*(double number, const Polynom& polynom) { return polynom * number; }
-//Polynom operator/(double number, const Polynom& polynom) { return Polynom(number) / polynom; }
 
-// ==================== Compound assignment ====================
+
 
 Polynom& Polynom::operator+=(const Polynom& other) { *this = *this + other; return *this; }
 Polynom& Polynom::operator-=(const Polynom& other) { *this = *this - other; return *this; }
@@ -277,7 +259,6 @@ Polynom& Polynom::operator-=(double other) { *this = *this - other; return *this
 Polynom& Polynom::operator*=(double other) { *this = *this * other; return *this; }
 Polynom& Polynom::operator/=(double other) { *this = *this / other; return *this; }
 
-// ==================== Comparison ====================
 
 bool Polynom::operator==(const Polynom& other) const {
     auto it1 = _polynom.begin();
@@ -294,11 +275,9 @@ bool Polynom::operator!=(const Polynom& other) const {
     return !(*this == other);
 }
 
-// ==================== Assignment ====================
 
 Polynom& Polynom::operator=(const Polynom& other) = default;
 
-// ==================== Output ====================
 
 std::ostream& operator<<(std::ostream& out, const Polynom& polynom) {
     if (polynom.is_zero()) {
@@ -319,7 +298,6 @@ std::ostream& operator<<(std::ostream& out, const Polynom& polynom) {
     return out;
 }
 
-// ==================== Private helpers ====================
 
 bool Polynom::check_powers(const Polynom& other) const {
     if (_polynom.is_empty()) return true;
