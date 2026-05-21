@@ -30,6 +30,7 @@ add_subdirectory (lib_TableM)
 add_subdirectory (lib_Uns_TableL)
 add_subdirectory (lib_Uns_TableM)
 add_subdirectory (lib_SkipList)
+add_subdirectory (lib_BTree)
 
 
 

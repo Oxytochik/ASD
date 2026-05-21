@@ -285,6 +285,12 @@ TEST(MonomTest, Output) {
     std::ostringstream oss3;
     oss3 << c;
     EXPECT_EQ(oss3.str(), "1.2y^3");
+
+    int p3[3] = { 1, 2, 2 };
+    Monom d(-3, p3);
+    std::ostringstream oss4;
+    oss4 << d;
+    EXPECT_EQ(oss4.str(), "-3xy^2z^2");
 }
 
 TEST(MonomTest, Input) {
