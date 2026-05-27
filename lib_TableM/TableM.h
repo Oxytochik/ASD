@@ -95,7 +95,14 @@ bool STableV<TKey, TValue>::is_empty() const noexcept {
 
 template <class TKey, class TValue>
 void STableV<TKey, TValue>::print(std::ostream& out) const {
-    out << "STableV (" << _rows.size() << " rows):\n";
-    for (int i = 0; i < _rows.size(); ++i)
-        out << "  " << _rows[i].first << " -> " << _rows[i].second << "\n";
+    int real_count = 0;
+    for (int i = 0; i < _rows.size(); ++i) {
+        if (!(_rows[i].first == TKey{}))
+            ++real_count;
+    }
+    for (int i = 0; i < _rows.size(); ++i) {
+        if (!(_rows[i].first == TKey{})) {
+            out << "  " << _rows[i].first << " -> " << _rows[i].second << "\n";
+        }
+    }
 }

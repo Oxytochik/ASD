@@ -74,7 +74,7 @@ TEST(TestSTableV, find_returns_nullptr_for_missing_key) {
 
 TEST(TestSTableV, check_an_empty_table) {
     STableV<double, std::string> t1;
-    t1.insert(1.5, "it is double");
+    t1.insert(1.5, "double");
     t1.erase(1.5);
 
     EXPECT_TRUE(t1.is_empty());
@@ -89,6 +89,7 @@ TEST(TestSTableV, check_a_non_empty_table) {
 
 TEST(TestSTableV, check_the_table_for_sorting) {
     STableV<std::string, std::string> t1;
+
     t1.insert("pos3", "Third");
     t1.insert("pos2", "Second");
     t1.insert("pos1", "First");
@@ -96,10 +97,24 @@ TEST(TestSTableV, check_the_table_for_sorting) {
     auto ptr = t1.find("pos3");
     ASSERT_NE(ptr, nullptr);
     EXPECT_EQ(*ptr, "Third");
+
     ptr = t1.find("pos2");
     ASSERT_NE(ptr, nullptr);
     EXPECT_EQ(*ptr, "Second");
+
     ptr = t1.find("pos1");
     ASSERT_NE(ptr, nullptr);
     EXPECT_EQ(*ptr, "First");
+
+    std::stringstream ss;
+    t1.print(ss);
+    std::string output = ss.str();
+
+    std::string expected =
+        //"STableV (3 rows):\n"
+        "  pos1 -> First\n"
+        "  pos2 -> Second\n"
+        "  pos3 -> Third\n";
+
+    EXPECT_EQ(output, expected);
 }

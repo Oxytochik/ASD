@@ -121,47 +121,13 @@ public:
                     std::cout << "  X   ";
                 }
                 else {
-                    std::cout << "  .   ";
+                    std::cout << "  0   ";
                 }
             }
             std::cout << "\n";
         }
     }
 
-protected:
-    size_t flipCoin() const noexcept {
-        size_t level = 0;
-        while (rand() % 2 == 1 && level < MAX_LVLS) {
-            level++;
-        }
-        return level;
-    }
-    NodeSL<TKey, TValue>* find_nearest(
-        const TKey& key, TVector<NodeSL<TKey, TValue>*>& update) const noexcept {
-        NodeSL<TKey, TValue>* current = nullptr;
-
-        for (int level = _lvl; level >= 0; level--) {
-            if (current == nullptr) {
-                current = _heads[level];
-            }
-
-            while (current != nullptr && current->_next[level] != nullptr &&
-                current->_next[level]->_data.first < key) {
-                current = current->_next[level];
-            }
-
-            if (level < update.size()) {
-                update[level] = current;
-            }
-        }
-
-        if (current != nullptr) {
-            return current->_next[0];
-        }
-        return nullptr;
-    }
-
-public:
     bool find(const TKey& key, TValue& value) const {
         TVector<NodeSL<TKey, TValue>*> update;
         update.resize(MAX_LVLS + 1, nullptr);
@@ -196,6 +162,41 @@ public:
             _lvl--;
         }
         return true;
+    }
+
+private:
+
+    size_t flipCoin() const noexcept {
+        size_t level = 0;
+        while (rand() % 2 == 1 && level < MAX_LVLS) {
+            level++;
+        }
+        return level;
+    }
+
+    NodeSL<TKey, TValue>* find_nearest(
+        const TKey& key, TVector<NodeSL<TKey, TValue>*>& update) const noexcept {
+        NodeSL<TKey, TValue>* current = nullptr;
+
+        for (int level = _lvl; level >= 0; level--) {
+            if (current == nullptr) {
+                current = _heads[level];
+            }
+
+            while (current != nullptr && current->_next[level] != nullptr &&
+                current->_next[level]->_data.first < key) {
+                current = current->_next[level];
+            }
+
+            if (level < update.size()) {
+                update[level] = current;
+            }
+        }
+
+        if (current != nullptr) {
+            return current->_next[0];
+        }
+        return nullptr;
     }
 };
 
