@@ -141,3 +141,13 @@ TVector<T> sort(const TVector<T>& source) {
     }
     return result;
 }
+
+//template <class T>
+//void sort(const TVector<T>& source, TVector<T>& result) {
+//    Heap<T> heap;
+//    for (int i = 0; i < source.size(); ++i)
+//        heap.insert(source[i]);
+//    result.clear();
+//    while (!heap.is_empty())
+//        result.push_back(heap.pop());
+//}
