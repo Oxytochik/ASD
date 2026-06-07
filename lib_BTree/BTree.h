@@ -37,6 +37,9 @@ public:
 	BTree(const TKey& key, const TValue& value);
 	~BTree();
 
+    const TNode<TKey, TValue>* get_root() const noexcept;
+    TNode<TKey, TValue>* get_root() noexcept;
+
     void insert(const TKey& key, const TValue& value) noexcept;
     TValue* find(const TKey& key) const noexcept;
     void erase(const TKey& key);
@@ -263,4 +266,13 @@ void BTree<TKey, TValue>::print_DLRC_rec(TNode<TKey, TValue>* node) const {
     if (node->_left) print_DLRC_rec(node->_left);
     if (node->_right) print_DLRC_rec(node->_right);
     std::cout << node->_data.first << ":" << node->_data.second << " ";
+}
+
+template <class TKey, class TValue>
+const TNode<TKey, TValue>* BTree<TKey, TValue>::get_root() const noexcept { 
+    return _root; 
+}
+template <class TKey, class TValue>
+TNode<TKey, TValue>* BTree<TKey, TValue>::get_root() noexcept { 
+    return _root; 
 }
