@@ -30,8 +30,8 @@ TEST(TestHeap, check_insert_with_random_generation) {
         int random_num = dist(gen);
         vec1.push_back(random_num);
     }
-    TVector<int> vec;
-    sort(vec1, vec);
+    TVector<int> vec = sort(vec1);
+    //sort(vec1, vec);
 
 
     bool is_sorted = true;
@@ -82,8 +82,8 @@ TEST(TestHeap, the_exception_is_when_pop_from_empty_heap) {
 
 TEST(TestHeap, check_pyramid_sort) {
     TVector<int> vec1({ 7, 6, 5, 4, 8, 1 });
-    TVector<int> vec;
-    sort(vec1, vec);
+    TVector<int> vec = sort(vec1);
+    //sort(vec1, vec);
     std::string s;
     for (int i = 0; i < vec.size(); ++i) {
         s += std::to_string(vec[i]) + " ";

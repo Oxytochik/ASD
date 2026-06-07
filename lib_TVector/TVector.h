@@ -21,7 +21,7 @@ public:
     TVector();
     explicit TVector(int);
     TVector(int, const T*);
-    explicit TVector(const TVector<T>&);
+    TVector(const TVector<T>&);
     explicit TVector(std::initializer_list<T>);
     TVector(int, std::initializer_list<T>);
 
@@ -72,7 +72,7 @@ public:
     void resize(int, bool);
 
 
-    void operator=(const TVector<T>&);
+    TVector<T>& operator=(const TVector<T>&);
     bool operator==(const TVector<T>&) const;
     bool operator!=(const TVector<T>&) const;
     T& operator[](int) const;
@@ -446,8 +446,9 @@ template<class T> void TVector<T>::resize(int new_size, bool toFill) {
 }
 
 
-template <class T> void TVector<T>::operator=(const TVector<T>& other) {
+template <class T>  TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
     assign(other);
+    return *this;
 }
 
 template <class T> bool TVector<T>::operator==(const TVector<T>& other) const {

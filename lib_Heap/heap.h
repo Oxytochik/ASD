@@ -30,7 +30,7 @@ public:
 
     void print() const noexcept;
 
-    void sort(const TVector<T>, TVector<T>);
+    TVector<T> sort(const TVector<T>);
 
 };
 
@@ -130,11 +130,14 @@ void Heap<T>::sift_down(int i) {
 }
 
 template <class T>
-void sort(const TVector<T>& source, TVector<T>& result) {
+TVector<T> sort(const TVector<T>& source) {
     Heap<T> heap;
-    for (int i = 0; i < source.size(); ++i)
+    for (int i = 0; i < source.size(); ++i) {
         heap.insert(source[i]);
-    result.clear();
-    while (!heap.is_empty())
+    }
+    TVector<T> result;
+    while (!heap.is_empty()) {
         result.push_back(heap.pop());
+    }
+    return result;
 }
