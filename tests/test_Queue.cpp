@@ -2,7 +2,6 @@
 #include <gtest/gtest.h>
 #include <initializer_list>
 #include "../lib_Queue/Queue.h"
-//реализация конструктора - не корректна, добавить запас
 TEST(QueueArrayTest, DefaultConstructor) {
 	Queue<int> q;
 	EXPECT_TRUE(q.is_empty());

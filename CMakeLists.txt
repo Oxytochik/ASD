@@ -33,6 +33,8 @@ add_subdirectory (lib_SkipList)
 add_subdirectory (lib_BTree)
 add_subdirectory (lib_BSTree)
 add_subdirectory (lib_Heap)
+add_subdirectory (lib_PQueue)
+add_subdirectory (lib_CHash_Table)
 
 
 

@@ -104,19 +104,19 @@ TEST(TestBinarySearchTree, check_erase_node) {
 
 TEST(TestBinarySearchTree, check_erase_node_with_one_child) {
     BSTree<int, std::string> tree;
-    tree.insert(15, "15.");
-    tree.insert(5, "5.");
-    tree.insert(30, "30.");
-    tree.insert(35, "35.");
-    tree.insert(18, "18.");
-    tree.insert(7, "7.");
-    tree.insert(3, "3.");
-    tree.insert(1, "1.");
-    tree.insert(9, "9.");
-    tree.insert(40, "40.");
-    tree.insert(6, "6.");
-    tree.insert(17, "17.");
-    tree.insert(19, "19.");
+    tree.insert(15, "15");
+    tree.insert(5, "5");
+    tree.insert(30, "30");
+    tree.insert(35, "35");
+    tree.insert(18, "18");
+    tree.insert(7, "7");
+    tree.insert(3, "3");
+    tree.insert(1, "1");
+    tree.insert(9, "9");
+    tree.insert(40, "40");
+    tree.insert(6, "6");
+    tree.insert(17, "17");
+    tree.insert(19, "19");
     tree.erase(35);
     tree.erase(3);
 
@@ -125,7 +125,7 @@ TEST(TestBinarySearchTree, check_erase_node_with_one_child) {
     tree.print();
     std::cout.rdbuf(old);
 
-    EXPECT_EQ(buffer.str(), "1:1. 5:5. 6:6. 7:7. 9:9. 15:15. 17:17. 18:18. 19:19. 30:30. 40:40. \n");
+    EXPECT_EQ(buffer.str(), "1:1 5:5 6:6 7:7 9:9 15:15 17:17 18:18 19:19 30:30 40:40 \n");
 }
 
 TEST(TestBinarySearchTree, check_erase_single_root) {
